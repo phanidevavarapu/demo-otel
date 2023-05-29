@@ -29,10 +29,10 @@ spec:
           image: "{{ .Values.image.otel.repository }}:{{ .Values.image.otel.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.otel.pullPolicy }}
           args:
-            - --config=/conf/config.yaml
+            - --config={{ .Values.config.file.path }}/config.yaml
           volumeMounts:
-            - mountPath: /conf
-              name: fso-agent-management-client-data
+            - mountPath: {{ .Values.config.file.path }}
+              name: {{ include "demo-otel.fullname" . }}-collector
         - name: fso-agent-management-client
           image: {{ .Values.image.fso.repository }}:{{ .Values.image.fso.tag }}
           imagePullPolicy: IfNotPresent
@@ -57,8 +57,12 @@ spec:
             - secretRef:
                 name: {{ include "demo-otel.fullname" . }}
           volumeMounts:
-            - name: fso-agent-management-client-data
+            - name: {{ include "demo-otel.fullname" . }}-collector
               mountPath: {{ .Values.config.file.path }}
       volumes:
-        - name: fso-agent-management-client-data
-          emptyDir: {}
+        - configMap:
+            items:
+              - key: config.yaml
+                path: config.yaml
+            name: {{ include "demo-otel.fullname" . }}-collector
+          name: {{ include "demo-otel.fullname" . }}-collector
