@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "demo-otel.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "demo-otel.labels" . | nindent 4 }}
+data:
+  SERVICE_URL: "SERVICE_URL_VALUE"
+  SERVICE_NAME: {{ .Values.service.name | required ".Values.service.name is required for a functional template" }}
+  SERVICE_NAMESPACE: {{ .Values.service.namespace | required ".Values.service.namespace is required for a functional template" }}
+  CLUSTER_NAME: "CLUSTER_NAME_VALUE"
+  OAUTH_ID: "OAUTH_ID_VALUE"
+  OAUTH_URL: "OAUTH_URL_VALUE"
+  OAUTH_TENANT_ID: "OAUTH_TENANT_ID_VALUE"
+  OAUTH_SCOPES: "OAUTH_SCOPES_VALUE"
+  CONFIG_FILE_PATH: {{ .Values.config.file.path }}
+  CONFIG_FILE_NAME: {{ .Values.config.file.name }}
+  INSECURE: {{ default true .Values.tls.insecure | quote }}
+  CA_FILE: {{ .Values.tls.caFile | quote }}
+  CERT_FILE: {{ .Values.tls.certFile | quote }}
+  KEY_FILE: {{ .Values.tls.keyFile | quote }}
+  AGENT_NAME: {{ .Values.service.name }}
+  RESOURCE_NAME: {{ include "demo-otel.fullname" . }}
