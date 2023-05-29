@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+namespace: default
+
 image:
   otel:
     repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector
@@ -34,5 +36,5 @@ tls:
 
 config:
   file:
-    path: /fso-agent-management-client-data
+    path: /collector
     name: config.yaml

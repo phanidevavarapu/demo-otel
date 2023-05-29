@@ -3,12 +3,12 @@ entries:
   demo-otel:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-05-28T17:58:35.865398-07:00"
+    created: "2023-05-29T08:05:27.424222-07:00"
     description: A Helm chart for Kubernetes
-    digest: 498dc22edc51c6e4977243021d42b5cd3bdbf3e8f60ffa4b55069ec1d2022b2a
+    digest: 3820273463aaf98a84391c9351c9c7cdec851882518dfad99438953d726cba2a
     name: demo-otel
     type: application
     urls:
-    - https://phanidevavarapu.github.io/demo-otel/templates/demo-otel-0.1.0.tgz
+    - https://phanidevavarapu.github.io/demo-otel/demo-otel-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-28T17:58:35.86477-07:00"
+generated: "2023-05-29T08:05:27.423281-07:00"
