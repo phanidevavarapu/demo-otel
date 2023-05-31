@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "demo-otel.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "demo-otel.labels" . | nindent 4 }}
 spec:
@@ -22,8 +23,15 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "demo-otel.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: config-copy-init-container
+          image: busybox:latest
+          command: ["cp", "/collector/config.yaml", "{{ .Values.config.file.path }}/config.yaml"]
+          volumeMounts:
+            - name: {{ include "demo-otel.fullname" . }}-collector
+              mountPath: /collector
+            - name: {{ include "demo-otel.fullname" . }}
+              mountPath: {{ .Values.config.file.path }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.otel.repository }}:{{ .Values.image.otel.tag | default .Chart.AppVersion }}"
@@ -32,7 +40,7 @@ spec:
             - --config={{ .Values.config.file.path }}/config.yaml
           volumeMounts:
             - mountPath: {{ .Values.config.file.path }}
-              name: {{ include "demo-otel.fullname" . }}-collector
+              name: {{ include "demo-otel.fullname" . }}
         - name: fso-agent-management-client
           image: {{ .Values.image.fso.repository }}:{{ .Values.image.fso.tag }}
           imagePullPolicy: IfNotPresent
@@ -57,7 +65,7 @@ spec:
             - secretRef:
                 name: {{ include "demo-otel.fullname" . }}
           volumeMounts:
-            - name: {{ include "demo-otel.fullname" . }}-collector
+            - name: {{ include "demo-otel.fullname" . }}
               mountPath: {{ .Values.config.file.path }}
       volumes:
         - configMap:
@@ -66,3 +74,5 @@ spec:
                 path: config.yaml
             name: {{ include "demo-otel.fullname" . }}-collector
           name: {{ include "demo-otel.fullname" . }}-collector
+        - name: {{ include "demo-otel.fullname" . }}
+          emptyDir: {}
