@@ -4,7 +4,7 @@
 
 replicaCount: 1
 
-namespace: default
+namespace: example2
 
 image:
   otel:
@@ -36,5 +36,5 @@ tls:
 
 config:
   file:
-    path: /collector
+    path: /config
     name: config.yaml
