@@ -38,3 +38,18 @@ config:
   file:
     path: /config
     name: config.yaml
+
+otelconfig: |
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+  processors:
+  exporters:
+    logging:
+  service:
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: []
+        exporters: [logging]
