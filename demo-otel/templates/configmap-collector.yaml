@@ -6,17 +6,4 @@ metadata:
   labels:
     {{- include "demo-otel.labels" . | nindent 4 }}
 data:
-  config.yaml: |
-    receivers:
-      otlp:
-        protocols:
-          grpc:
-    processors:
-    exporters:
-      logging:
-    service:
-      pipelines:
-        traces:
-          receivers: [otlp]
-          processors: []
-          exporters: [logging]
+  config.yaml: |   {{ .Values.otelconfig | nindent 4  }}
